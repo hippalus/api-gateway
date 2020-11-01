@@ -11,7 +11,6 @@ import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -32,21 +31,17 @@ public class RedisConfig {
     }
 
 
-   // @Bean
+    //@Bean
     public JedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(myRedisProperties.getRedisHost());
         redisStandaloneConfiguration.setPort(myRedisProperties.getRedisPort());
         redisStandaloneConfiguration.setDatabase(0);
 
-
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofSeconds(60));// 60s connection timeout
 
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration,
-                jedisClientConfiguration.build());
-
-        return jedisConnectionFactory;
+        return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration.build());
     }
 
     @Bean(destroyMethod = "shutdown")
@@ -54,7 +49,6 @@ public class RedisConfig {
     public RedissonClient redisson() {
         Config config = new Config();
         config.useSingleServer().setAddress("redis://localhost:6379");
-
         return Redisson.create(config);
     }
     @Bean
@@ -65,14 +59,13 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redissonConnectionFactory());
 
         Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-
         serializer.setObjectMapper(mapper);
 
         redisTemplate.setValueSerializer(serializer);

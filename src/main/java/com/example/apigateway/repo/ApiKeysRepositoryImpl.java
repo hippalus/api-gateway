@@ -1,7 +1,6 @@
 package com.example.apigateway.repo;
 
 import com.example.apigateway.model.ApiKeys;
-import org.redisson.api.RBucket;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Repository;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ApiKeysRepositoryImpl implements ApiKeysRepository {
 
-    private RedissonClient redisson;
+    private final RedissonClient redisson;
 
     public ApiKeysRepositoryImpl(RedissonClient redisson) {
         this.redisson = redisson;
@@ -19,9 +18,6 @@ public class ApiKeysRepositoryImpl implements ApiKeysRepository {
     public void save(ApiKeys apiKeys) {
         RMap<String, ApiKeys> apiKeysRMap = redisson.getMap("apiKeys");
         apiKeysRMap.putIfAbsent(apiKeys.getApiKeyHeader(),apiKeys);
-
-
-
     }
 
     @Override

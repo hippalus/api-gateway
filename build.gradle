@@ -35,7 +35,14 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-core
     compile group: 'com.github.vladimir-bukhtoyarov', name: 'bucket4j-core', version: '4.10.0'
 
-
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-stream', version: '3.0.8.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-kafka
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-kafka', version: '3.0.8.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream-test-support
+    testCompile group: 'org.springframework.cloud', name: 'spring-cloud-stream-test-support', version: '3.0.8.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka-test
+    testCompile group: 'org.springframework.kafka', name: 'spring-kafka-test', version: '2.5.7.RELEASE'
 
     // https://mvnrepository.com/artifact/it.ozimov/embedded-redis
     testCompile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.3', { exclude group: 'org.slf4j', module: 'slf4j-simple' }
